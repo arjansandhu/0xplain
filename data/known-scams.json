@@ -1,0 +1,11 @@
+{
+  "description": "Community-reported scam and phishing contract addresses",
+  "lastUpdated": "2025-02-01",
+  "addresses": [
+    { "address": "0x0000000000000000000000000000000000000000", "reason": "Null address (burn)" },
+    { "address": "0x000000000000000000000000000000000000dead", "reason": "Dead address (burn)" },
+    { "address": "0xae0b890a625b87c23b8ae626cb8e3eb0630a2092", "reason": "Known phishing contract" },
+    { "address": "0x3c9e5dab01bb2cd3e7c3dd42e1aafeb8bf1e3429", "reason": "Reported scam drainer" },
+    { "address": "0x59abf3837fa962d6853b4cc0a19513aa031fd32b", "reason": "Fake token airdrop scam" }
+  ]
+}
