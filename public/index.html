@@ -38,110 +38,138 @@
       border-bottom: 1px solid var(--border);
     }
 
-    header h1 {
-      font-size: 2rem;
-      font-weight: 700;
-      letter-spacing: -0.02em;
-    }
-
+    header h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; }
     header h1 span { color: var(--accent); }
+    header p { color: var(--text-muted); margin-top: 0.5rem; font-size: 0.95rem; line-height: 1.5; }
 
-    header p {
-      color: var(--text-muted);
-      margin-top: 0.5rem;
-      font-size: 0.95rem;
-      line-height: 1.5;
+    /* How it works */
+    .how-section {
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
     }
 
-    .mode-toggle {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
+    .how-section h2 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+
+    .how-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
       margin-bottom: 1.5rem;
     }
 
-    .mode-btn {
-      padding: 0.5rem 1rem;
-      border-radius: 8px;
+    @media (max-width: 600px) { .how-grid { grid-template-columns: 1fr; } }
+
+    .how-card {
+      padding: 1rem;
+      background: var(--surface);
       border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 0.85rem;
-      transition: all 0.15s;
-    }
-
-    .mode-btn.active {
-      background: var(--accent);
-      color: white;
-      border-color: var(--accent);
-    }
-
-    .wallet-bar {
-      display: none;
-      justify-content: center;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.5rem;
-      padding: 0.75rem;
-      background: var(--surface);
       border-radius: 10px;
-      border: 1px solid var(--border);
-      font-size: 0.85rem;
     }
 
-    .wallet-bar.visible { display: flex; }
+    .how-card h3 {
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
 
-    .wallet-bar .addr {
+    .how-card .price {
+      font-size: 0.75rem;
+      color: var(--green);
       font-family: 'SF Mono', 'Fira Code', monospace;
-      color: var(--accent);
+      margin-bottom: 0.5rem;
     }
 
-    .connect-btn {
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      border: none;
-      background: var(--accent);
-      color: white;
-      cursor: pointer;
-      font-size: 0.85rem;
-    }
+    .how-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.5; }
 
-    .connect-btn:hover { background: var(--accent-hover); }
-
-    .tabs {
+    .flow-steps {
       display: flex;
       gap: 0;
+      align-items: stretch;
       margin-bottom: 1.5rem;
-      border-radius: 10px;
-      overflow: hidden;
-      border: 1px solid var(--border);
     }
 
-    .tab {
+    .flow-step {
       flex: 1;
       padding: 0.75rem;
       text-align: center;
-      background: var(--surface);
+      font-size: 0.75rem;
       color: var(--text-muted);
-      cursor: pointer;
+      position: relative;
+    }
+
+    .flow-step .num {
+      display: inline-block;
+      width: 22px;
+      height: 22px;
+      line-height: 22px;
+      border-radius: 50%;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      font-size: 0.7rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .flow-step .label { display: block; }
+
+    .flow-step:not(:last-child)::after {
+      content: '\2192';
+      position: absolute;
+      right: -6px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: var(--border);
+      font-size: 1rem;
+    }
+
+    .sample-toggle {
+      font-size: 0.8rem;
+      color: var(--accent);
+      background: none;
       border: none;
+      cursor: pointer;
+      padding: 0;
+      text-decoration: underline;
+    }
+
+    .sample-toggle:hover { color: var(--accent-hover); }
+
+    .sample-block {
+      display: none;
+      margin-top: 0.75rem;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .sample-block.open { display: block; }
+
+    .sample-block pre {
+      padding: 1rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.7rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      color: var(--text-muted);
+    }
+
+    /* Live query sections */
+    .section-label {
       font-size: 0.9rem;
-      font-weight: 500;
-      transition: all 0.15s;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
     }
-
-    .tab.active {
-      background: var(--surface2);
-      color: var(--text);
-    }
-
-    .tab:not(:last-child) { border-right: 1px solid var(--border); }
 
     .input-group {
       display: flex;
       gap: 0.5rem;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1rem;
     }
 
     .input-group input {
@@ -181,6 +209,7 @@
       border: 1px solid var(--border);
       border-radius: 12px;
       overflow: hidden;
+      margin-bottom: 2rem;
     }
 
     .result-header {
@@ -204,31 +233,17 @@
     .status-badge.error { background: rgba(239,68,68,0.15); color: var(--red); }
     .status-badge.loading { background: rgba(99,102,241,0.15); color: var(--accent); }
 
-    .result-body {
-      padding: 1rem;
-      min-height: 200px;
-    }
-
-    .result-body pre {
-      font-family: 'SF Mono', 'Fira Code', monospace;
-      font-size: 0.8rem;
-      line-height: 1.6;
-      white-space: pre-wrap;
-      word-wrap: break-word;
-    }
+    .result-body { padding: 1rem; min-height: 80px; }
 
     .placeholder-text {
       color: var(--text-muted);
       text-align: center;
-      padding: 3rem 1rem;
-      font-size: 0.9rem;
+      padding: 2rem 1rem;
+      font-size: 0.85rem;
     }
 
-    /* Decoded transaction display */
-    .decoded-card {
-      display: grid;
-      gap: 1rem;
-    }
+    /* Decoded cards */
+    .decoded-card { display: grid; gap: 1rem; }
 
     .decoded-section {
       padding: 1rem;
@@ -280,36 +295,15 @@
       border-radius: 8px;
     }
 
-    .risk-meter .score {
-      font-size: 2rem;
-      font-weight: 700;
-      min-width: 80px;
-      text-align: center;
-    }
-
+    .risk-meter .score { font-size: 2rem; font-weight: 700; min-width: 80px; text-align: center; }
     .risk-meter .score.low { color: var(--green); }
     .risk-meter .score.medium { color: var(--yellow); }
     .risk-meter .score.high { color: var(--red); }
 
-    .risk-bar {
-      flex: 1;
-      height: 8px;
-      background: var(--border);
-      border-radius: 4px;
-      overflow: hidden;
-    }
+    .risk-bar { flex: 1; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+    .risk-bar-fill { height: 100%; border-radius: 4px; transition: width 0.5s ease; }
 
-    .risk-bar-fill {
-      height: 100%;
-      border-radius: 4px;
-      transition: width 0.5s ease;
-    }
-
-    .flags-list {
-      list-style: none;
-      padding: 0;
-    }
-
+    .flags-list { list-style: none; padding: 0; }
     .flags-list li {
       padding: 0.4rem 0.6rem;
       margin: 0.3rem 0;
@@ -320,24 +314,13 @@
       color: var(--orange);
     }
 
-    .breakdown-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-    }
-
-    .breakdown-item {
-      display: flex;
-      justify-content: space-between;
-      padding: 0.4rem 0;
-      font-size: 0.8rem;
-    }
-
+    .breakdown-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    .breakdown-item { display: flex; justify-content: space-between; padding: 0.4rem 0; font-size: 0.8rem; }
     .breakdown-item .label { color: var(--text-muted); }
 
     footer {
       text-align: center;
-      margin-top: 3rem;
+      margin-top: 2rem;
       padding-top: 1.5rem;
       border-top: 1px solid var(--border);
       color: var(--text-muted);
@@ -352,146 +335,131 @@
   <div class="container">
     <header>
       <h1><span>0x</span>plain</h1>
-      <p>Transaction intelligence API behind x402. Decode transactions. Score wallets. Pay per request in USDC.</p>
+      <p>Pay-per-request transaction intelligence API behind x402.<br>Decode ERC-20 transactions. Score wallet risk. Paid in USDC on Base.</p>
     </header>
 
-    <div class="mode-toggle">
-      <button class="mode-btn active" data-mode="demo" onclick="setMode('demo')">Demo (free)</button>
-      <button class="mode-btn" data-mode="wallet" onclick="setMode('wallet')">Pay with Wallet (x402)</button>
-    </div>
+    <!-- How It Works -->
+    <div class="how-section">
+      <h2>How it works</h2>
 
-    <div class="wallet-bar" id="walletBar">
-      <span id="walletStatus">No wallet connected</span>
-      <button class="connect-btn" id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
-    </div>
-
-    <div class="tabs">
-      <button class="tab active" data-tab="explain" onclick="setTab('explain')">Explain Transaction</button>
-      <button class="tab" data-tab="risk" onclick="setTab('risk')">Risk Score</button>
-    </div>
-
-    <div id="explainPanel">
-      <div class="input-group">
-        <input type="text" id="txInput" placeholder="0x... transaction hash" spellcheck="false" />
-        <button class="submit-btn" id="explainBtn" onclick="submitExplain()">Explain</button>
+      <div class="flow-steps">
+        <div class="flow-step"><span class="num">1</span><span class="label">Request endpoint</span></div>
+        <div class="flow-step"><span class="num">2</span><span class="label">Get 402 + price</span></div>
+        <div class="flow-step"><span class="num">3</span><span class="label">Sign USDC payment</span></div>
+        <div class="flow-step"><span class="num">4</span><span class="label">Receive data</span></div>
       </div>
-    </div>
 
-    <div id="riskPanel" style="display:none">
-      <div class="input-group">
-        <input type="text" id="addressInput" placeholder="0x... wallet address" spellcheck="false" />
-        <button class="submit-btn" id="riskBtn" onclick="submitRisk()">Score</button>
+      <div class="how-grid">
+        <div class="how-card">
+          <h3>GET /explain</h3>
+          <div class="price">$0.001 per request</div>
+          <p>Submit a transaction hash. Get the token, amount, sender, recipient, gas cost, and a plain-English explanation of what happened.</p>
+          <br>
+          <button class="sample-toggle" onclick="toggleSample('explainSample')">View sample response</button>
+          <div class="sample-block" id="explainSample">
+<pre>{
+  "transaction": {
+    "hash": "0xc6ed46b7...e34b05de",
+    "block": 38372100,
+    "timestamp": "2026-03-03T04:10:22.000Z",
+    "status": "success"
+  },
+  "decoded": {
+    "type": "ERC-20 Transfer",
+    "action": "transfer",
+    "token": { "symbol": "USDC", "name": "USD Coin", "decimals": 6 },
+    "from": "0xfaec...3e1f",
+    "to": "0x564b...5798",
+    "amount": "20.00",
+    "amountRaw": "20000000"
+  },
+  "gas": { "used": 52000, "price": "0.006 gwei", "costUsd": "$0.0008" },
+  "explanation": "This transaction transferred 20.00 USDC
+    from 0xfaec...3e1f to 0x564b...5798 on Base Sepolia.
+    The transfer cost less than a tenth of a cent in gas."
+}</pre>
+          </div>
+        </div>
+
+        <div class="how-card">
+          <h3>GET /risk</h3>
+          <div class="price">$0.005 per request</div>
+          <p>Submit a wallet address. Get a risk score (0&ndash;1), behavioral flags, counterparty analysis, and an AI-generated risk narrative.</p>
+          <br>
+          <button class="sample-toggle" onclick="toggleSample('riskSample')">View sample response</button>
+          <div class="sample-block" id="riskSample">
+<pre>{
+  "address": "0x564b...5798",
+  "riskScore": {
+    "overall": 0.38,
+    "level": "MEDIUM",
+    "breakdown": {
+      "sanctionsExposure": 0.0,
+      "scamExposure": 0.0,
+      "behavioralRisk": 0.55,
+      "counterpartyRisk": 0.25,
+      "walletMaturity": 0.65
+    }
+  },
+  "flags": [
+    "BRAND_NEW_WALLET: Created 1 days ago",
+    "LOW_DIVERSITY: Only 2 unique counterparties"
+  ],
+  "riskNarrative": "This wallet presents moderate risk
+    primarily due to its newness and limited activity..."
+}</pre>
+          </div>
+        </div>
       </div>
+
+      <p style="font-size:0.8rem;color:var(--text-muted);text-align:center">
+        Agents discover this API via <a href="https://x402.org" target="_blank" style="color:var(--accent)">x402</a>.
+        Any request without payment returns <code style="background:var(--surface2);padding:0.1rem 0.3rem;border-radius:3px;font-size:0.75rem">402 Payment Required</code>
+        with USDC payment terms. Compatible agents and wallets pay automatically.
+      </p>
     </div>
 
-    <div class="result-panel">
+    <!-- Explain Transaction -->
+    <div class="section-label">Explain Transaction</div>
+    <div class="input-group">
+      <input type="text" id="txInput" placeholder="0x... transaction hash on Base Sepolia" spellcheck="false" />
+      <button class="submit-btn" id="explainBtn" onclick="submitExplain()">Explain</button>
+    </div>
+
+    <div class="result-panel" id="explainResult" style="display:none">
       <div class="result-header">
-        <span id="resultLabel">Response</span>
-        <span class="status-badge" id="statusBadge" style="display:none"></span>
+        <span id="explainLabel">Transaction</span>
+        <span class="status-badge" id="explainBadge" style="display:none"></span>
       </div>
-      <div class="result-body" id="resultBody">
-        <div class="placeholder-text">Enter a transaction hash or wallet address above to get started.</div>
+      <div class="result-body" id="explainBody"></div>
+    </div>
+
+    <!-- Risk Score -->
+    <div class="section-label">Risk Score</div>
+    <div class="input-group">
+      <input type="text" id="addressInput" placeholder="0x... wallet address on Base Sepolia" spellcheck="false" />
+      <button class="submit-btn" id="riskBtn" onclick="submitRisk()">Score</button>
+    </div>
+
+    <div class="result-panel" id="riskResult" style="display:none">
+      <div class="result-header">
+        <span id="riskLabel">Risk Analysis</span>
+        <span class="status-badge" id="riskBadge" style="display:none"></span>
       </div>
+      <div class="result-body" id="riskBody"></div>
     </div>
 
     <footer>
       Powered by <a href="https://x402.org" target="_blank">x402</a> &middot;
       Base Sepolia testnet &middot;
-      <a href="/health">API Health</a>
+      <a href="/health">API Status</a> &middot;
+      <a href="https://github.com/arjansandhu/0xplain" target="_blank">GitHub</a>
     </footer>
   </div>
 
 <script>
-  let currentMode = 'demo';
-  let currentTab = 'explain';
-  let connectedAddress = null;
-
-  function setMode(mode) {
-    currentMode = mode;
-    document.querySelectorAll('.mode-btn').forEach(b => {
-      b.classList.toggle('active', b.dataset.mode === mode);
-    });
-    const bar = document.getElementById('walletBar');
-    bar.classList.toggle('visible', mode === 'wallet');
-
-    if (mode === 'wallet' && !window.ethereum) {
-      document.getElementById('walletStatus').textContent = 'No wallet detected (install MetaMask)';
-      document.getElementById('connectBtn').style.display = 'none';
-    }
-  }
-
-  function setTab(tab) {
-    currentTab = tab;
-    document.querySelectorAll('.tab').forEach(t => {
-      t.classList.toggle('active', t.dataset.tab === tab);
-    });
-    document.getElementById('explainPanel').style.display = tab === 'explain' ? '' : 'none';
-    document.getElementById('riskPanel').style.display = tab === 'risk' ? '' : 'none';
-  }
-
-  async function connectWallet() {
-    if (!window.ethereum) {
-      alert('No wallet detected. Please install MetaMask or Coinbase Wallet.');
-      return;
-    }
-    try {
-      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
-      connectedAddress = accounts[0];
-      document.getElementById('walletStatus').innerHTML =
-        'Connected: <span class="addr">' + connectedAddress.slice(0,6) + '...' + connectedAddress.slice(-4) + '</span>';
-      document.getElementById('connectBtn').textContent = 'Connected';
-      document.getElementById('connectBtn').disabled = true;
-
-      // Prompt to switch to Base Sepolia (chain 84532 = 0x14a34)
-      try {
-        await window.ethereum.request({
-          method: 'wallet_switchEthereumChain',
-          params: [{ chainId: '0x14a34' }],
-        });
-      } catch (e) {
-        // If chain not added, add it
-        if (e.code === 4902) {
-          await window.ethereum.request({
-            method: 'wallet_addEthereumChain',
-            params: [{
-              chainId: '0x14a34',
-              chainName: 'Base Sepolia',
-              rpcUrls: ['https://sepolia.base.org'],
-              nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
-              blockExplorerUrls: ['https://sepolia.basescan.org'],
-            }],
-          });
-        }
-      }
-    } catch (err) {
-      console.error('Wallet connection failed:', err);
-    }
-  }
-
-  function showLoading(label) {
-    const badge = document.getElementById('statusBadge');
-    badge.textContent = 'Loading...';
-    badge.className = 'status-badge loading';
-    badge.style.display = '';
-    document.getElementById('resultLabel').textContent = label;
-    document.getElementById('resultBody').innerHTML =
-      '<div class="placeholder-text">Fetching data from Base Sepolia...</div>';
-  }
-
-  function showError(msg) {
-    const badge = document.getElementById('statusBadge');
-    badge.textContent = 'Error';
-    badge.className = 'status-badge error';
-    badge.style.display = '';
-    document.getElementById('resultBody').innerHTML =
-      '<div class="placeholder-text" style="color:var(--red)">' + escapeHtml(msg) + '</div>';
-  }
-
-  function showSuccess() {
-    const badge = document.getElementById('statusBadge');
-    badge.textContent = currentMode === 'demo' ? 'Demo' : 'Paid (x402)';
-    badge.className = 'status-badge success';
-    badge.style.display = '';
+  function toggleSample(id) {
+    document.getElementById(id).classList.toggle('open');
   }
 
   function escapeHtml(s) {
@@ -503,66 +471,11 @@
     return a.slice(0,6) + '...' + a.slice(-4);
   }
 
-  // --- Demo mode fetch ---
-  async function fetchDemo(endpoint) {
-    const res = await fetch(endpoint);
-    if (!res.ok) {
-      const body = await res.json().catch(() => ({}));
-      throw new Error(body.error || `HTTP ${res.status}`);
-    }
-    return res.json();
-  }
-
-  // --- Wallet mode: handle 402 flow ---
-  async function fetchWithWallet(endpoint) {
-    if (!connectedAddress) throw new Error('Please connect your wallet first.');
-
-    // Step 1: make request, expect 402
-    const res = await fetch(endpoint);
-    if (res.ok) return res.json(); // Already paid somehow
-
-    if (res.status !== 402) {
-      const body = await res.json().catch(() => ({}));
-      throw new Error(body.error || `HTTP ${res.status}`);
-    }
-
-    // Step 2: parse x402 payment requirements
-    const paymentRequired = await res.json();
-    const requirements = paymentRequired?.accepts?.[0] || paymentRequired?.paymentRequirements?.[0];
-    if (!requirements) throw new Error('Could not parse payment requirements from 402 response.');
-
-    const payload = requirements.payload;
-    if (!payload) throw new Error('No payment payload in requirements.');
-
-    // Step 3: sign the EIP-712 typed data
-    const signature = await window.ethereum.request({
-      method: 'eth_signTypedData_v4',
-      params: [connectedAddress, JSON.stringify(payload)],
-    });
-
-    // Step 4: build the x402 payment header and retry
-    const paymentHeader = btoa(JSON.stringify({
-      ...requirements,
-      signature,
-    }));
-
-    const paidRes = await fetch(endpoint, {
-      headers: { 'X-PAYMENT': paymentHeader },
-    });
-
-    if (!paidRes.ok) {
-      const body = await paidRes.json().catch(() => ({}));
-      throw new Error(body.error || `Payment failed: HTTP ${paidRes.status}`);
-    }
-
-    return paidRes.json();
-  }
-
-  async function doFetch(endpoint) {
-    if (currentMode === 'demo') {
-      return fetchDemo(endpoint.replace(/^\/(explain|risk)/, '/demo/$1'));
-    }
-    return fetchWithWallet(endpoint);
+  function setBadge(id, text, cls) {
+    const el = document.getElementById(id);
+    el.textContent = text;
+    el.className = 'status-badge ' + cls;
+    el.style.display = '';
   }
 
   // --- Render explain result ---
@@ -584,8 +497,6 @@
     }
 
     let html = `<div class="decoded-card">`;
-
-    // Transfer info
     html += `
       <div class="decoded-section">
         <h3>${escapeHtml(d.type)}</h3>
@@ -594,8 +505,6 @@
         <div class="decoded-row"><span class="label">From</span><span class="value">${truncAddr(d.from)}</span></div>
         <div class="decoded-row"><span class="label">To</span><span class="value">${truncAddr(d.to)}</span></div>
       </div>`;
-
-    // Transaction metadata
     html += `
       <div class="decoded-section">
         <h3>Transaction</h3>
@@ -604,12 +513,9 @@
         <div class="decoded-row"><span class="label">Time</span><span class="value">${new Date(data.transaction.timestamp).toLocaleString()}</span></div>
         <div class="decoded-row"><span class="label">Gas Cost</span><span class="value">${escapeHtml(data.gas.costUsd)}</span></div>
       </div>`;
-
-    // AI explanation
     if (data.explanation) {
       html += `<div class="explanation-box">${escapeHtml(data.explanation)}</div>`;
     }
-
     html += `</div>`;
     return html;
   }
@@ -621,8 +527,6 @@
     const barColor = s.level === 'LOW' ? 'var(--green)' : s.level === 'MEDIUM' ? 'var(--yellow)' : 'var(--red)';
 
     let html = `<div class="decoded-card">`;
-
-    // Risk meter
     html += `
       <div class="risk-meter">
         <div class="score ${colorClass}">${s.overall}</div>
@@ -637,7 +541,6 @@
         </div>
       </div>`;
 
-    // Wallet profile
     const wp = data.walletProfile;
     html += `
       <div class="decoded-section">
@@ -649,7 +552,6 @@
         <div class="decoded-row"><span class="label">Value Transferred</span><span class="value">${escapeHtml(wp.totalValueTransferred || '$0')}</span></div>
       </div>`;
 
-    // Breakdown
     html += `
       <div class="decoded-section">
         <h3>Score Breakdown</h3>
@@ -660,7 +562,6 @@
         </div>
       </div>`;
 
-    // Flags
     if (data.flags && data.flags.length > 0) {
       html += `
         <div class="decoded-section">
@@ -671,7 +572,6 @@
         </div>`;
     }
 
-    // Narrative
     if (data.riskNarrative) {
       html += `<div class="explanation-box">${escapeHtml(data.riskNarrative)}</div>`;
     }
@@ -680,18 +580,31 @@
     return html;
   }
 
-  // --- Submitters ---
+  // --- Submitters (use demo endpoints for live queries) ---
   async function submitExplain() {
     const tx = document.getElementById('txInput').value.trim();
     if (!tx) return;
-    showLoading('Explain: ' + truncAddr(tx));
+
+    const panel = document.getElementById('explainResult');
+    panel.style.display = '';
+    document.getElementById('explainLabel').textContent = 'Explain: ' + truncAddr(tx);
+    setBadge('explainBadge', 'Loading...', 'loading');
+    document.getElementById('explainBody').innerHTML = '<div class="placeholder-text">Fetching from Base Sepolia...</div>';
     document.getElementById('explainBtn').disabled = true;
+
     try {
-      const data = await doFetch(`/explain?tx=${encodeURIComponent(tx)}`);
-      showSuccess();
-      document.getElementById('resultBody').innerHTML = renderExplain(data);
+      const res = await fetch(`/demo/explain?tx=${encodeURIComponent(tx)}`);
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      setBadge('explainBadge', 'Success', 'success');
+      document.getElementById('explainBody').innerHTML = renderExplain(data);
     } catch (err) {
-      showError(err.message);
+      setBadge('explainBadge', 'Error', 'error');
+      document.getElementById('explainBody').innerHTML =
+        '<div class="placeholder-text" style="color:var(--red)">' + escapeHtml(err.message) + '</div>';
     } finally {
       document.getElementById('explainBtn').disabled = false;
     }
@@ -700,20 +613,32 @@
   async function submitRisk() {
     const addr = document.getElementById('addressInput').value.trim();
     if (!addr) return;
-    showLoading('Risk: ' + truncAddr(addr));
+
+    const panel = document.getElementById('riskResult');
+    panel.style.display = '';
+    document.getElementById('riskLabel').textContent = 'Risk: ' + truncAddr(addr);
+    setBadge('riskBadge', 'Loading...', 'loading');
+    document.getElementById('riskBody').innerHTML = '<div class="placeholder-text">Analyzing wallet on Base Sepolia...</div>';
     document.getElementById('riskBtn').disabled = true;
+
     try {
-      const data = await doFetch(`/risk?address=${encodeURIComponent(addr)}`);
-      showSuccess();
-      document.getElementById('resultBody').innerHTML = renderRisk(data);
+      const res = await fetch(`/demo/risk?address=${encodeURIComponent(addr)}`);
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body.error || `HTTP ${res.status}`);
+      }
+      const data = await res.json();
+      setBadge('riskBadge', 'Success', 'success');
+      document.getElementById('riskBody').innerHTML = renderRisk(data);
     } catch (err) {
-      showError(err.message);
+      setBadge('riskBadge', 'Error', 'error');
+      document.getElementById('riskBody').innerHTML =
+        '<div class="placeholder-text" style="color:var(--red)">' + escapeHtml(err.message) + '</div>';
     } finally {
       document.getElementById('riskBtn').disabled = false;
     }
   }
 
-  // Enter key support
   document.getElementById('txInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitExplain(); });
   document.getElementById('addressInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitRisk(); });
 </script>
