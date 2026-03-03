@@ -1,0 +1,721 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>0xplain — Transaction Intelligence API</title>
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --surface: #12121a;
+      --surface2: #1a1a26;
+      --border: #2a2a3a;
+      --text: #e0e0e8;
+      --text-muted: #8888a0;
+      --accent: #6366f1;
+      --accent-hover: #818cf8;
+      --green: #22c55e;
+      --yellow: #eab308;
+      --red: #ef4444;
+      --orange: #f97316;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+    }
+
+    .container { max-width: 800px; margin: 0 auto; padding: 2rem 1.5rem; }
+
+    header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      padding-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    header h1 span { color: var(--accent); }
+
+    header p {
+      color: var(--text-muted);
+      margin-top: 0.5rem;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .mode-toggle {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .mode-btn {
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.85rem;
+      transition: all 0.15s;
+    }
+
+    .mode-btn.active {
+      background: var(--accent);
+      color: white;
+      border-color: var(--accent);
+    }
+
+    .wallet-bar {
+      display: none;
+      justify-content: center;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.5rem;
+      padding: 0.75rem;
+      background: var(--surface);
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 0.85rem;
+    }
+
+    .wallet-bar.visible { display: flex; }
+
+    .wallet-bar .addr {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--accent);
+    }
+
+    .connect-btn {
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      cursor: pointer;
+      font-size: 0.85rem;
+    }
+
+    .connect-btn:hover { background: var(--accent-hover); }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 1.5rem;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 0.75rem;
+      text-align: center;
+      background: var(--surface);
+      color: var(--text-muted);
+      cursor: pointer;
+      border: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: all 0.15s;
+    }
+
+    .tab.active {
+      background: var(--surface2);
+      color: var(--text);
+    }
+
+    .tab:not(:last-child) { border-right: 1px solid var(--border); }
+
+    .input-group {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-group input {
+      flex: 1;
+      padding: 0.75rem 1rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.85rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .input-group input:focus { border-color: var(--accent); }
+    .input-group input::placeholder { color: var(--text-muted); }
+
+    .submit-btn {
+      padding: 0.75rem 1.5rem;
+      border-radius: 10px;
+      border: none;
+      background: var(--accent);
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      font-size: 0.9rem;
+      white-space: nowrap;
+      transition: background 0.15s;
+    }
+
+    .submit-btn:hover { background: var(--accent-hover); }
+    .submit-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+    .result-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .result-header {
+      padding: 0.75rem 1rem;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .status-badge {
+      padding: 0.2rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    .status-badge.success { background: rgba(34,197,94,0.15); color: var(--green); }
+    .status-badge.error { background: rgba(239,68,68,0.15); color: var(--red); }
+    .status-badge.loading { background: rgba(99,102,241,0.15); color: var(--accent); }
+
+    .result-body {
+      padding: 1rem;
+      min-height: 200px;
+    }
+
+    .result-body pre {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      line-height: 1.6;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .placeholder-text {
+      color: var(--text-muted);
+      text-align: center;
+      padding: 3rem 1rem;
+      font-size: 0.9rem;
+    }
+
+    /* Decoded transaction display */
+    .decoded-card {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .decoded-section {
+      padding: 1rem;
+      background: var(--surface2);
+      border-radius: 8px;
+    }
+
+    .decoded-section h3 {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      margin-bottom: 0.75rem;
+    }
+
+    .decoded-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.3rem 0;
+      font-size: 0.85rem;
+    }
+
+    .decoded-row .label { color: var(--text-muted); }
+
+    .decoded-row .value {
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      font-size: 0.8rem;
+      text-align: right;
+      max-width: 60%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .explanation-box {
+      padding: 1rem;
+      background: rgba(99,102,241,0.08);
+      border-left: 3px solid var(--accent);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    .risk-meter {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem;
+      background: var(--surface2);
+      border-radius: 8px;
+    }
+
+    .risk-meter .score {
+      font-size: 2rem;
+      font-weight: 700;
+      min-width: 80px;
+      text-align: center;
+    }
+
+    .risk-meter .score.low { color: var(--green); }
+    .risk-meter .score.medium { color: var(--yellow); }
+    .risk-meter .score.high { color: var(--red); }
+
+    .risk-bar {
+      flex: 1;
+      height: 8px;
+      background: var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .risk-bar-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.5s ease;
+    }
+
+    .flags-list {
+      list-style: none;
+      padding: 0;
+    }
+
+    .flags-list li {
+      padding: 0.4rem 0.6rem;
+      margin: 0.3rem 0;
+      background: rgba(249,115,22,0.1);
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-family: 'SF Mono', 'Fira Code', monospace;
+      color: var(--orange);
+    }
+
+    .breakdown-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .breakdown-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.4rem 0;
+      font-size: 0.8rem;
+    }
+
+    .breakdown-item .label { color: var(--text-muted); }
+
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+      color: var(--text-muted);
+      font-size: 0.8rem;
+    }
+
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1><span>0x</span>plain</h1>
+      <p>Transaction intelligence API behind x402. Decode transactions. Score wallets. Pay per request in USDC.</p>
+    </header>
+
+    <div class="mode-toggle">
+      <button class="mode-btn active" data-mode="demo" onclick="setMode('demo')">Demo (free)</button>
+      <button class="mode-btn" data-mode="wallet" onclick="setMode('wallet')">Pay with Wallet (x402)</button>
+    </div>
+
+    <div class="wallet-bar" id="walletBar">
+      <span id="walletStatus">No wallet connected</span>
+      <button class="connect-btn" id="connectBtn" onclick="connectWallet()">Connect Wallet</button>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="explain" onclick="setTab('explain')">Explain Transaction</button>
+      <button class="tab" data-tab="risk" onclick="setTab('risk')">Risk Score</button>
+    </div>
+
+    <div id="explainPanel">
+      <div class="input-group">
+        <input type="text" id="txInput" placeholder="0x... transaction hash" spellcheck="false" />
+        <button class="submit-btn" id="explainBtn" onclick="submitExplain()">Explain</button>
+      </div>
+    </div>
+
+    <div id="riskPanel" style="display:none">
+      <div class="input-group">
+        <input type="text" id="addressInput" placeholder="0x... wallet address" spellcheck="false" />
+        <button class="submit-btn" id="riskBtn" onclick="submitRisk()">Score</button>
+      </div>
+    </div>
+
+    <div class="result-panel">
+      <div class="result-header">
+        <span id="resultLabel">Response</span>
+        <span class="status-badge" id="statusBadge" style="display:none"></span>
+      </div>
+      <div class="result-body" id="resultBody">
+        <div class="placeholder-text">Enter a transaction hash or wallet address above to get started.</div>
+      </div>
+    </div>
+
+    <footer>
+      Powered by <a href="https://x402.org" target="_blank">x402</a> &middot;
+      Base Sepolia testnet &middot;
+      <a href="/health">API Health</a>
+    </footer>
+  </div>
+
+<script>
+  let currentMode = 'demo';
+  let currentTab = 'explain';
+  let connectedAddress = null;
+
+  function setMode(mode) {
+    currentMode = mode;
+    document.querySelectorAll('.mode-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.mode === mode);
+    });
+    const bar = document.getElementById('walletBar');
+    bar.classList.toggle('visible', mode === 'wallet');
+
+    if (mode === 'wallet' && !window.ethereum) {
+      document.getElementById('walletStatus').textContent = 'No wallet detected (install MetaMask)';
+      document.getElementById('connectBtn').style.display = 'none';
+    }
+  }
+
+  function setTab(tab) {
+    currentTab = tab;
+    document.querySelectorAll('.tab').forEach(t => {
+      t.classList.toggle('active', t.dataset.tab === tab);
+    });
+    document.getElementById('explainPanel').style.display = tab === 'explain' ? '' : 'none';
+    document.getElementById('riskPanel').style.display = tab === 'risk' ? '' : 'none';
+  }
+
+  async function connectWallet() {
+    if (!window.ethereum) {
+      alert('No wallet detected. Please install MetaMask or Coinbase Wallet.');
+      return;
+    }
+    try {
+      const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' });
+      connectedAddress = accounts[0];
+      document.getElementById('walletStatus').innerHTML =
+        'Connected: <span class="addr">' + connectedAddress.slice(0,6) + '...' + connectedAddress.slice(-4) + '</span>';
+      document.getElementById('connectBtn').textContent = 'Connected';
+      document.getElementById('connectBtn').disabled = true;
+
+      // Prompt to switch to Base Sepolia (chain 84532 = 0x14a34)
+      try {
+        await window.ethereum.request({
+          method: 'wallet_switchEthereumChain',
+          params: [{ chainId: '0x14a34' }],
+        });
+      } catch (e) {
+        // If chain not added, add it
+        if (e.code === 4902) {
+          await window.ethereum.request({
+            method: 'wallet_addEthereumChain',
+            params: [{
+              chainId: '0x14a34',
+              chainName: 'Base Sepolia',
+              rpcUrls: ['https://sepolia.base.org'],
+              nativeCurrency: { name: 'ETH', symbol: 'ETH', decimals: 18 },
+              blockExplorerUrls: ['https://sepolia.basescan.org'],
+            }],
+          });
+        }
+      }
+    } catch (err) {
+      console.error('Wallet connection failed:', err);
+    }
+  }
+
+  function showLoading(label) {
+    const badge = document.getElementById('statusBadge');
+    badge.textContent = 'Loading...';
+    badge.className = 'status-badge loading';
+    badge.style.display = '';
+    document.getElementById('resultLabel').textContent = label;
+    document.getElementById('resultBody').innerHTML =
+      '<div class="placeholder-text">Fetching data from Base Sepolia...</div>';
+  }
+
+  function showError(msg) {
+    const badge = document.getElementById('statusBadge');
+    badge.textContent = 'Error';
+    badge.className = 'status-badge error';
+    badge.style.display = '';
+    document.getElementById('resultBody').innerHTML =
+      '<div class="placeholder-text" style="color:var(--red)">' + escapeHtml(msg) + '</div>';
+  }
+
+  function showSuccess() {
+    const badge = document.getElementById('statusBadge');
+    badge.textContent = currentMode === 'demo' ? 'Demo' : 'Paid (x402)';
+    badge.className = 'status-badge success';
+    badge.style.display = '';
+  }
+
+  function escapeHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function truncAddr(a) {
+    if (!a || a.length < 12) return a || '';
+    return a.slice(0,6) + '...' + a.slice(-4);
+  }
+
+  // --- Demo mode fetch ---
+  async function fetchDemo(endpoint) {
+    const res = await fetch(endpoint);
+    if (!res.ok) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || `HTTP ${res.status}`);
+    }
+    return res.json();
+  }
+
+  // --- Wallet mode: handle 402 flow ---
+  async function fetchWithWallet(endpoint) {
+    if (!connectedAddress) throw new Error('Please connect your wallet first.');
+
+    // Step 1: make request, expect 402
+    const res = await fetch(endpoint);
+    if (res.ok) return res.json(); // Already paid somehow
+
+    if (res.status !== 402) {
+      const body = await res.json().catch(() => ({}));
+      throw new Error(body.error || `HTTP ${res.status}`);
+    }
+
+    // Step 2: parse x402 payment requirements
+    const paymentRequired = await res.json();
+    const requirements = paymentRequired?.accepts?.[0] || paymentRequired?.paymentRequirements?.[0];
+    if (!requirements) throw new Error('Could not parse payment requirements from 402 response.');
+
+    const payload = requirements.payload;
+    if (!payload) throw new Error('No payment payload in requirements.');
+
+    // Step 3: sign the EIP-712 typed data
+    const signature = await window.ethereum.request({
+      method: 'eth_signTypedData_v4',
+      params: [connectedAddress, JSON.stringify(payload)],
+    });
+
+    // Step 4: build the x402 payment header and retry
+    const paymentHeader = btoa(JSON.stringify({
+      ...requirements,
+      signature,
+    }));
+
+    const paidRes = await fetch(endpoint, {
+      headers: { 'X-PAYMENT': paymentHeader },
+    });
+
+    if (!paidRes.ok) {
+      const body = await paidRes.json().catch(() => ({}));
+      throw new Error(body.error || `Payment failed: HTTP ${paidRes.status}`);
+    }
+
+    return paidRes.json();
+  }
+
+  async function doFetch(endpoint) {
+    if (currentMode === 'demo') {
+      return fetchDemo(endpoint.replace(/^\/(explain|risk)/, '/demo/$1'));
+    }
+    return fetchWithWallet(endpoint);
+  }
+
+  // --- Render explain result ---
+  function renderExplain(data) {
+    const d = data.decoded;
+    if (d.type === 'unsupported') {
+      return `
+        <div class="decoded-card">
+          <div class="decoded-section">
+            <h3>Transaction</h3>
+            <div class="decoded-row"><span class="label">Hash</span><span class="value">${truncAddr(data.transaction.hash)}</span></div>
+            <div class="decoded-row"><span class="label">Block</span><span class="value">${data.transaction.block}</span></div>
+            <div class="decoded-row"><span class="label">Status</span><span class="value">${data.transaction.status}</span></div>
+          </div>
+          <div class="explanation-box" style="border-color:var(--yellow);background:rgba(234,179,8,0.08)">
+            <strong>Unsupported:</strong> ${escapeHtml(d.reason)}
+          </div>
+        </div>`;
+    }
+
+    let html = `<div class="decoded-card">`;
+
+    // Transfer info
+    html += `
+      <div class="decoded-section">
+        <h3>${escapeHtml(d.type)}</h3>
+        <div class="decoded-row"><span class="label">Token</span><span class="value">${escapeHtml(d.token.symbol)} (${escapeHtml(d.token.name)})</span></div>
+        <div class="decoded-row"><span class="label">Amount</span><span class="value" style="color:var(--green);font-weight:600">${escapeHtml(d.amount)} ${escapeHtml(d.token.symbol)}</span></div>
+        <div class="decoded-row"><span class="label">From</span><span class="value">${truncAddr(d.from)}</span></div>
+        <div class="decoded-row"><span class="label">To</span><span class="value">${truncAddr(d.to)}</span></div>
+      </div>`;
+
+    // Transaction metadata
+    html += `
+      <div class="decoded-section">
+        <h3>Transaction</h3>
+        <div class="decoded-row"><span class="label">Hash</span><span class="value">${truncAddr(data.transaction.hash)}</span></div>
+        <div class="decoded-row"><span class="label">Block</span><span class="value">${data.transaction.block}</span></div>
+        <div class="decoded-row"><span class="label">Time</span><span class="value">${new Date(data.transaction.timestamp).toLocaleString()}</span></div>
+        <div class="decoded-row"><span class="label">Gas Cost</span><span class="value">${escapeHtml(data.gas.costUsd)}</span></div>
+      </div>`;
+
+    // AI explanation
+    if (data.explanation) {
+      html += `<div class="explanation-box">${escapeHtml(data.explanation)}</div>`;
+    }
+
+    html += `</div>`;
+    return html;
+  }
+
+  // --- Render risk result ---
+  function renderRisk(data) {
+    const s = data.riskScore;
+    const colorClass = s.level === 'LOW' ? 'low' : s.level === 'MEDIUM' ? 'medium' : 'high';
+    const barColor = s.level === 'LOW' ? 'var(--green)' : s.level === 'MEDIUM' ? 'var(--yellow)' : 'var(--red)';
+
+    let html = `<div class="decoded-card">`;
+
+    // Risk meter
+    html += `
+      <div class="risk-meter">
+        <div class="score ${colorClass}">${s.overall}</div>
+        <div style="flex:1">
+          <div style="display:flex;justify-content:space-between;margin-bottom:0.3rem">
+            <span style="font-weight:600">${s.level} RISK</span>
+            <span style="color:var(--text-muted);font-size:0.8rem">${truncAddr(data.address)}</span>
+          </div>
+          <div class="risk-bar">
+            <div class="risk-bar-fill" style="width:${s.overall * 100}%;background:${barColor}"></div>
+          </div>
+        </div>
+      </div>`;
+
+    // Wallet profile
+    const wp = data.walletProfile;
+    html += `
+      <div class="decoded-section">
+        <h3>Wallet Profile</h3>
+        <div class="decoded-row"><span class="label">Age</span><span class="value">${wp.ageInDays} days</span></div>
+        <div class="decoded-row"><span class="label">Transactions</span><span class="value">${wp.totalTransactions}</span></div>
+        <div class="decoded-row"><span class="label">Counterparties</span><span class="value">${wp.uniqueCounterparties}</span></div>
+        <div class="decoded-row"><span class="label">Tokens</span><span class="value">${(wp.tokensHeld || []).join(', ') || 'None'}</span></div>
+        <div class="decoded-row"><span class="label">Value Transferred</span><span class="value">${escapeHtml(wp.totalValueTransferred || '$0')}</span></div>
+      </div>`;
+
+    // Breakdown
+    html += `
+      <div class="decoded-section">
+        <h3>Score Breakdown</h3>
+        <div class="breakdown-grid">
+          ${Object.entries(s.breakdown).map(([k,v]) =>
+            `<div class="breakdown-item"><span class="label">${k}</span><span>${v}</span></div>`
+          ).join('')}
+        </div>
+      </div>`;
+
+    // Flags
+    if (data.flags && data.flags.length > 0) {
+      html += `
+        <div class="decoded-section">
+          <h3>Flags</h3>
+          <ul class="flags-list">
+            ${data.flags.map(f => `<li>${escapeHtml(f)}</li>`).join('')}
+          </ul>
+        </div>`;
+    }
+
+    // Narrative
+    if (data.riskNarrative) {
+      html += `<div class="explanation-box">${escapeHtml(data.riskNarrative)}</div>`;
+    }
+
+    html += `</div>`;
+    return html;
+  }
+
+  // --- Submitters ---
+  async function submitExplain() {
+    const tx = document.getElementById('txInput').value.trim();
+    if (!tx) return;
+    showLoading('Explain: ' + truncAddr(tx));
+    document.getElementById('explainBtn').disabled = true;
+    try {
+      const data = await doFetch(`/explain?tx=${encodeURIComponent(tx)}`);
+      showSuccess();
+      document.getElementById('resultBody').innerHTML = renderExplain(data);
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      document.getElementById('explainBtn').disabled = false;
+    }
+  }
+
+  async function submitRisk() {
+    const addr = document.getElementById('addressInput').value.trim();
+    if (!addr) return;
+    showLoading('Risk: ' + truncAddr(addr));
+    document.getElementById('riskBtn').disabled = true;
+    try {
+      const data = await doFetch(`/risk?address=${encodeURIComponent(addr)}`);
+      showSuccess();
+      document.getElementById('resultBody').innerHTML = renderRisk(data);
+    } catch (err) {
+      showError(err.message);
+    } finally {
+      document.getElementById('riskBtn').disabled = false;
+    }
+  }
+
+  // Enter key support
+  document.getElementById('txInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitExplain(); });
+  document.getElementById('addressInput').addEventListener('keydown', e => { if (e.key === 'Enter') submitRisk(); });
+</script>
+</body>
+</html>
