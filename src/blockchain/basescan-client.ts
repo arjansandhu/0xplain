@@ -23,9 +23,11 @@ interface BasescanResponse<T> {
 export function createBasescanClient(network: NetworkConfig) {
   const baseUrl = network.explorerApiUrl;
   const apiKey = network.explorerApiKey;
+  const chainId = String(network.chainId);
 
   async function fetchApi<T>(params: Record<string, string>): Promise<T> {
-    const url = new URL("/api", baseUrl);
+    const url = new URL(baseUrl);
+    url.searchParams.set("chainid", chainId);
     url.searchParams.set("apikey", apiKey);
     for (const [key, value] of Object.entries(params)) {
       url.searchParams.set(key, value);
